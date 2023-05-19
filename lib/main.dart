@@ -40,7 +40,7 @@ class AppHome extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {},
-              child: const Text("Outlined Butt"),
+              child: const Text("Outlined Button"),
             ),
             const Padding(
               padding: EdgeInsets.all(20.0),
