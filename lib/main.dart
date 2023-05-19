@@ -3,8 +3,13 @@ import "src/screens/welcome_screens.dart";
 import 'package:get/get.dart';
 import 'src/screens/login_screen.dart';
 import 'src/screens/register_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(const App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(App());
+}
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
