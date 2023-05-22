@@ -33,7 +33,7 @@ class WelcomeScreen extends StatelessWidget {
               children: [
                 Expanded(
                     child: OutlinedButton(
-                  onPressed: () => Get.to(() => const LoginScreen()),
+                  onPressed: () => Get.to(() => LoginScreen()),
                   child: Text("LOGIN"),
                   style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(),
@@ -47,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 Expanded(
                     child: ElevatedButton(
-                        onPressed: () => Get.to(() => const RegisterScreen()),
+                        onPressed: () => Get.to(() => RegisterScreen()),
                         child: Text("REGISTER"),
                         style: OutlinedButton.styleFrom(
                             shape: RoundedRectangleBorder(),
