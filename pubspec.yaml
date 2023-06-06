@@ -17,6 +17,8 @@ dependencies:
   firebase_database: ^10.2.1
   flutter_native_splash: ^2.2.7
   get: ^4.6.1
+  cloud_firestore: ^4.8.0
+  intl: ^0.18.1
 
 
 dev_dependencies:
