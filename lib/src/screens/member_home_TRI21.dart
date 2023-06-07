@@ -6,6 +6,7 @@ import 'form.dart';
 import 'group_info.dart';
 import 'tugas_list.dart';
 import 'homePage.dart';
+import 'edit_schedule_page.dart';
 
 class MemberHome extends StatefulWidget {
   @override
@@ -27,6 +28,15 @@ Future<List<Map<String, dynamic>>> fetchScheduleData() async {
 }
 
 class _MemberHomeState extends State<MemberHome> {
+  void _editSchedule(Map<String, dynamic> schedule) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditSchedulePage(schedule: schedule),
+      ),
+    );
+  }
+
   int _currentIndex = 1;
   final List<String> daysOrder = [
     'Senin',
@@ -147,6 +157,12 @@ class _MemberHomeState extends State<MemberHome> {
                       DataCell(Text(data['jam'])),
                       DataCell(Text(data['mataKuliah'])),
                     ],
+                    onSelectChanged: (bool? selected) {
+                      if (selected!) {
+                        _editSchedule(
+                            data); // Panggil fungsi _editSchedule saat DataRow dipilih
+                      }
+                    },
                   );
                 }).toList(),
               ),
