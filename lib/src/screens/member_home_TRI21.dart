@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'form.dart';
+import 'group_info.dart';
+import 'tugas_list.dart';
+import 'homePage.dart';
 
 class MemberHome extends StatefulWidget {
   @override
@@ -156,13 +159,9 @@ class _MemberHomeState extends State<MemberHome> {
     final tabs = [
       // Ubah tab pertama menjadi tampilan jadwal kuliah
       _buildScheduleTable(), // Menampilkan tabel jadwal kuliah
-      ScheduleForm(),
-      Center(
-        child: Text('Group'),
-      ),
-      Center(
-        child: Text('Home'),
-      )
+      TaskList(),
+      GroupPage(),
+      HomePage(username: "kelompok 8")
     ];
 
     return Scaffold(
