@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "417204315475",
+    "firebase_url": "https://pjmk-e1962-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "pjmk-e1962",
+    "storage_bucket": "pjmk-e1962.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417204315475:android:8bb36ea7544b2a1bd1eda6",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417204315475-blda7ajs6l0i0ubd8iv2j70us3t1p1gp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_application_1",
+            "certificate_hash": "7117af7f5bea9780ab65dbc681efda7eee67ab31"
+          }
+        },
+        {
+          "client_id": "417204315475-r2itnoeoo6cbsjcl4scug656rgp4uoo1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBr6oNTkQmDY0wiJJNctFUIS3JOA3chQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417204315475-r2itnoeoo6cbsjcl4scug656rgp4uoo1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
