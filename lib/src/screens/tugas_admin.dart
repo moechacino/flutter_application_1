@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskList extends StatefulWidget {
   @override
@@ -6,35 +7,49 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  List<String> tasks = [];
+  CollectionReference taskCollection =
+      FirebaseFirestore.instance.collection('tasks');
 
-  void addTask(String task) {
-    setState(() {
-      tasks.add(task);
-    });
+  Stream<List<DocumentSnapshot>> readTasks() =>
+      taskCollection.snapshots().map((snapshot) => snapshot.docs);
+
+  void addTask(String task) async {
+    await taskCollection.add({'task': task});
   }
 
-  void removeTask(int index) {
-    setState(() {
-      tasks.removeAt(index);
-    });
+  void removeTask(DocumentSnapshot document) async {
+    await taskCollection.doc(document.id).delete();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(tasks[index]),
-            trailing: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                removeTask(index);
+      body: StreamBuilder<List<DocumentSnapshot>>(
+        stream: readTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<DocumentSnapshot> taskDocs = snapshot.data!;
+            List<String> tasks =
+                taskDocs.map((doc) => doc['task'] as String).toList();
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(tasks[index]),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      removeTask(taskDocs[index]);
+                    },
+                  ),
+                );
               },
-            ),
-          );
+            );
+          } else if (snapshot.hasError) {
+            return Text('Terjadi kesalahan: ${snapshot.error}');
+          } else {
+            return CircularProgressIndicator();
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(

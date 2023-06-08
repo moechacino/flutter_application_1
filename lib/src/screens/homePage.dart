@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -23,29 +24,60 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Halo, $username!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    User? user = FirebaseAuth.instance.currentUser;
+    String userUID = '';
+    if (user != null) {
+      userUID = user.uid;
+    }
+    Stream<DocumentSnapshot> getUserStream(String userUID) {
+      return FirebaseFirestore.instance
+          .collection('registrations')
+          .doc(userUID)
+          .snapshots();
+    }
+
+    // ignore: unused_local_variable
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: getUserStream(userUID),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String namaLengkap = snapshot.data!.get('namaLengkap') ?? '';
+          String statusMahasiswa = snapshot.data!.get('statusKelas') ?? '';
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Halo, $namaLengkap!',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'current status: $statusMahasiswa',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    child: Text('Pengaturan'),
+                    onPressed: () {
+                      // Tambahkan logika untuk menavigasi ke halaman pengaturan
+                    },
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              child: Text('Pengaturan'),
-              onPressed: () {
-                // Tambahkan logika untuk menavigasi ke halaman pengaturan
-              },
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.logout),
+              onPressed: _logout,
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.logout),
-        onPressed: _logout,
-      ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Terjadi kesalahan');
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }

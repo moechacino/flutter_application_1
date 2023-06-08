@@ -32,17 +32,14 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
     try {
       await FirebaseFirestore.instance
           .collection('schedules')
-          .doc(widget
-              .schedule.id) // Menggunakan ID dokumen untuk memperbarui data
+          .doc(widget.schedule['documentId'])
           .update({
         'mataKuliah': _mataKuliahController.text,
         'jam': _jamController.text,
       });
-      Navigator.pop(
-          context); // Kembali ke halaman sebelumnya setelah pembaruan berhasil
+      Navigator.pop(context);
     } catch (e) {
       print('Terjadi kesalahan saat memperbarui jadwal: $e');
-      // Tambahkan penanganan kesalahan sesuai kebutuhan Anda
     }
   }
 

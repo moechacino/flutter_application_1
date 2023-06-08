@@ -64,53 +64,53 @@ class _GroupPageState extends State<GroupPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () async {
-          final member = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddMemberScreen()),
-          );
-          if (member != null) {
-            addMember(member);
-          }
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   onPressed: () async {
+      //     final member = await Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => AddMemberScreen()),
+      //     );
+      //     if (member != null) {
+      //       addMember(member);
+      //     }
+      //   },
+      // ),
     );
   }
 }
 
-class AddMemberScreen extends StatelessWidget {
-  final TextEditingController _textEditingController = TextEditingController();
+// class AddMemberScreen extends StatelessWidget {
+//   final TextEditingController _textEditingController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tambah Anggota Grup'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _textEditingController,
-              decoration: InputDecoration(
-                labelText: 'Nama Anggota',
-              ),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              child: Text('Tambah'),
-              onPressed: () {
-                final member = _textEditingController.text.trim();
-                Navigator.pop(context, member);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Tambah Anggota Grup'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             TextField(
+//               controller: _textEditingController,
+//               decoration: InputDecoration(
+//                 labelText: 'Nama Anggota',
+//               ),
+//             ),
+//             SizedBox(height: 16.0),
+//             ElevatedButton(
+//               child: Text('Tambah'),
+//               onPressed: () {
+//                 final member = _textEditingController.text.trim();
+//                 Navigator.pop(context, member);
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

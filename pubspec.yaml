@@ -19,6 +19,7 @@ dependencies:
   get: ^4.6.1
   cloud_firestore: ^4.8.0
   intl: ^0.18.1
+  firebase_messaging: ^14.6.2
 
 
 dev_dependencies:

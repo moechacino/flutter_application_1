@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/screens/welcome_screens.dart';
@@ -105,7 +106,7 @@ class RegisterScreen extends StatelessWidget {
                   SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Mendapatkan nilai-nilai dari TextFormField dan DropdownButtonFormField
                             String namaLengkap = namaLengkapController.text;
                             String email = emailController.text;
@@ -116,22 +117,48 @@ class RegisterScreen extends StatelessWidget {
                             String kelas = selectedKelas!;
                             String statusKelas = selectedStatusKelas!;
 
-                            // Melakukan pengiriman data ke Firebase
-                            // Pastikan Anda telah menginisialisasi Firebase dan mengimpor package 'firebase_auth'
-                            FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                                    email: email, password: password)
-                                .then((userCredential) {
+                            try {
+                              // Melakukan pengiriman data ke Firebase Authentication
+                              UserCredential userCredential = await FirebaseAuth
+                                  .instance
+                                  .createUserWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              );
+
+                              // Mendapatkan UID pengguna yang baru didaftarkan
+                              String userUID = userCredential.user!.uid;
+
+                              // Memasukkan UID pengguna ke dalam dokumen registrasi di Firestore
+                              // await registrationRef
+                              //     .update({'userUID': userUID});
+
+                              // Menyimpan data registrasi dalam Firestore
+                              DocumentReference registrationRef =
+                                  FirebaseFirestore.instance
+                                      .collection('registrations')
+                                      .doc(userUID);
+
+                              await registrationRef.set({
+                                'namaLengkap': namaLengkap,
+                                'email': email,
+                                'username': username,
+                                'kelas': kelas,
+                                'statusKelas': statusKelas,
+                              });
+
                               // Data berhasil dikirim
                               // Lakukan tindakan atau navigasi selanjutnya
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => WelcomeScreen()));
-                            }).catchError((error) {
-                              // Terjadi kesalahan saat mengirim data
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WelcomeScreen()),
+                              );
+                            } catch (error) {
+                              // Terjadi kesalahan saat menyimpan data atau mengirim data ke Firebase Authentication
                               // Tampilkan pesan kesalahan atau lakukan tindakan sesuai kebutuhan
-                            });
+                              print('Terjadi kesalahan saat mendaftar: $error');
+                            }
                           },
                           child: Text("DAFTAR")))
                 ],

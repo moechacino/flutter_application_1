@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/screens/member_home_TRI21.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'admin_home_TRI21.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -57,22 +59,70 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               String email = emailController.text;
                               String password = passwordController.text;
-                              FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              )
-                                  .then((value) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MemberHome(),
-                                  ),
+
+                              try {
+                                UserCredential userCredential =
+                                    await FirebaseAuth.instance
+                                        .signInWithEmailAndPassword(
+                                  email: email,
+                                  password: password,
                                 );
-                              }).catchError((error) {
+
+                                String userUID = userCredential.user!.uid;
+
+                                // Mengakses dokumen pengguna dari Firestore
+                                DocumentSnapshot userSnapshot =
+                                    await FirebaseFirestore.instance
+                                        .collection('registrations')
+                                        .doc(userUID)
+                                        .get();
+
+                                if (userSnapshot.exists) {
+                                  // Memeriksa statusKelas pada dokumen pengguna
+                                  String statusKelas = (userSnapshot.data()
+                                      as Map<String, dynamic>)['statusKelas'];
+
+                                  if (statusKelas == 'Mahasiswa Biasa') {
+                                    // Navigasi ke halaman beranda anggota jika statusKelas sesuai
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MemberHome(),
+                                      ),
+                                    );
+                                  } else if (statusKelas == 'PJ Mata Kuliah') {
+                                    // Navigasi ke halaman beranda admin jika statusKelas sesuai
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AdminHome(),
+                                      ),
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Akses Ditolak'),
+                                          content:
+                                              Text('Anda tidak memiliki akses'),
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                }
+                              } catch (error) {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -91,7 +141,7 @@ class LoginScreen extends StatelessWidget {
                                     );
                                   },
                                 );
-                              });
+                              }
                             },
                             child: Text("LOGIN"),
                           ),

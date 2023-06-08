@@ -10,7 +10,15 @@ class _ScheduleFormState extends State<ScheduleForm> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> addSchedule(Map<String, dynamic> scheduleData) async {
     try {
-      await _firestore.collection('schedules').add(scheduleData);
+      String hari = scheduleData['hari']; // Mendapatkan nilai 'hari'
+      DocumentReference docRef = _firestore.collection(hari).doc();
+
+      // Menambahkan dokumen baru dengan field 'jam' dan 'mataKuliah' sebagai string
+      await docRef.set({
+        'jam': scheduleData['jam'],
+        'mataKuliah': scheduleData['mataKuliah']
+      });
+
       print('Jadwal berhasil ditambahkan');
     } catch (e) {
       print('Terjadi kesalahan saat menambahkan jadwal: $e');
